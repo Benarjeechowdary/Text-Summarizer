@@ -22,7 +22,9 @@ python-dotenv
 
 
 torch
+langchain.text_splitter
 
-
+langchain.prompts
+langchain.chains
 
 streamlit
