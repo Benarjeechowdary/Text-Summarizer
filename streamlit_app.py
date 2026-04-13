@@ -1,18 +1,18 @@
-# 🔹 Import required libraries
-import streamlit as st
-from summarizer import summarize_large_text   # ✅ backend function
 
-# 🔹 Page configuration (must be first Streamlit command)
+import streamlit as st
+from summarizer import summarize_large_text   
+
+
 st.set_page_config(
     page_title="AI Text Summarizer",
     page_icon="🧠",
     layout="centered"
 )
 
-# 🔹 App Title
+#  Title
 st.title("🧠 AI Text Summarizer")
 
-# 🔹 App Description
+#  App Description
 st.markdown("""
 Welcome to the AI-powered Text Summarizer!
 
@@ -24,7 +24,7 @@ Welcome to the AI-powered Text Summarizer!
 👉 Paste your text below and click **Summarize**
 """)
 
-# 🔹 Input Section
+# Input Section
 st.subheader("📥 Enter Your Text")
 
 user_text = st.text_area(
@@ -35,31 +35,30 @@ user_text = st.text_area(
 
 
 
-# 🔹 Button Section
+#  Button Section
 if st.button("🚀 Summarize"):
 
-    # 🔸 Check if input is empty
+    # Check if input is empty
     if not user_text.strip():
         st.warning("⚠️ Please enter some text before summarizing.")
     
     else:
-        # 🔸 Show spinner while processing
+       
         with st.spinner("⏳ Summarizing your text... Please wait..."):
             
-            # 🔸 Call backend function
-            # (You can later modify function to accept length_option)
+           
             summary = summarize_large_text(user_text)
 
-        # 🔹 Output Section
+        
         st.subheader("📄 Summary")
 
-        # 🔸 Display summary in styled box
+        
         st.success(summary)
 
-        # 🔹 Divider
+        
         st.markdown("---")
 
-        # 🔹 Extra Information (nice UI touch)
+        
         col1, col2 = st.columns(2)
 
         with col1:
@@ -68,6 +67,6 @@ if st.button("🚀 Summarize"):
         with col2:
             st.metric("📝 Summary Words", len(summary.split()))
 
-        # 🔹 Footer
+       
         st.markdown("---")
         st.caption("Built using LangChain + Streamlit 🚀")
