@@ -6,12 +6,10 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# 🔑 Step 1: Initialize LLM
+# model
 llm =ChatGroq(model="llama-3.3-70b-versatile")
 
-# 🧩 Step 2: Define Prompts
-
-# Chunk-level summary prompt (MAP)
+# prompts
 map_prompt = PromptTemplate(
     input_variables=["text"],
     template="""
@@ -27,7 +25,7 @@ map_prompt = PromptTemplate(
     """
 )
 
-# Final summary prompt (REDUCE)
+
 reduce_prompt = PromptTemplate(
     input_variables=["text"],
     template="""
@@ -41,17 +39,17 @@ reduce_prompt = PromptTemplate(
     """
 )
 
-# 🧩 Step 3: Create Chains
+# Chains
 map_chain = LLMChain(llm=llm, prompt=map_prompt)
 reduce_chain = LLMChain(llm=llm, prompt=reduce_prompt)
 
-# 🧩 Step 4: Function to summarize large text
+# Function to summarize large text
 def summarize_large_text(text):
 
     if len(text)<1000:
         return map_chain(text)
     
-    # 🔹 Split text into chunks
+    #  Split text into chunks
     splitter = RecursiveCharacterTextSplitter(
         chunk_size=1000,
         chunk_overlap=100
@@ -61,20 +59,20 @@ def summarize_large_text(text):
 
     print(f"Total chunks created: {len(chunks)}")
 
-    # 🔹 Map Step: Summarize each chunk
+    # Summarize each chunk
     summaries = []
     for chunk in chunks:
         summary = map_chain.run(chunk)
         summaries.append(summary)
 
-    # 🔹 Reduce Step: Combine summaries
+    #  Combine summaries
     combined_text = "\n".join(summaries)
     final_summary = reduce_chain.run(combined_text)
 
     return final_summary
 
 
-# 🧪 Step 5: Test
+
 if __name__ == "__main__":
     text=input("Please enter text:")
     result = summarize_large_text(text)
